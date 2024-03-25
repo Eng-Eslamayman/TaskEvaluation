@@ -8,5 +8,7 @@ namespace TaskEvaluation.Core.Interfaces.IServices
 {
     public interface IAssignmentService
     {
+        //Task UpdateAsync(AssignmentDTO model);
+        Task DeletAsync(int id);
     }
 }

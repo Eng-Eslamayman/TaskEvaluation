@@ -8,13 +8,13 @@ namespace TaskEvaluation.Core.Interfaces.IRepositories
 {
     public interface IBaseRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAll();
-        Task<T> GetById<Tid>(Tid id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task<T> GetByIdAsync<Tid>(Tid id);
         Task<bool> IsExists<Tvalue> (string key,Tvalue value);
-        Task<T> Create(T model);
+        Task<T> CreateAsync(T model);
         Task CreateRange(List<T> model);
-        Task<T> Update(T model);
-        Task Delete(T model);
+        Task<T> UpdateAsync(T model);
+        Task DeleteAsync(T model);
         Task SaveChangeAsync();
 
 
