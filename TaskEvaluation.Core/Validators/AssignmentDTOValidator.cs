@@ -1,11 +1,12 @@
 ﻿using FluentValidation;
 using TaskEvaluation.Core.Consts;
 using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 namespace TaskEvaluation.Core.Validators
 {
-    public class AssignmentValidator: AbstractValidator<Assignment>
+    public class AssignmentDTOValidator: AbstractValidator<AssignmentDTO>
     {
-        public AssignmentValidator()
+        public AssignmentDTOValidator()
         {
             RuleFor(assign => assign.Title)
                 .NotNull().WithMessage(Errors.RequiredField);

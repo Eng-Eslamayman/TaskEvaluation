@@ -7,8 +7,9 @@ using TaskEvaluation.Core.Entities.General;
 
 namespace TaskEvaluation.Core.Entities.Business
 {
-    public class EvalutionGrade : BaseModel
+    public class EvaluationGrade : BaseModel
     {
         public string Grade { get; set; } = null!;
+        public ICollection<Solution>? Solutions { get; set; }
     }
 }

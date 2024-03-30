@@ -10,7 +10,7 @@ namespace TaskEvaluation.Web
         {
             Services.AddScoped<IValidator<Assignment>, AssignmentValidator>();
             Services.AddScoped<IValidator<Course>, CourseValidator>();
-            Services.AddScoped<IValidator<EvalutionGrade>, EvalutionGradeValidator>();
+            Services.AddScoped<IValidator<EvaluationGrade>, EvalutionGradeValidator>();
             Services.AddScoped<IValidator<Core.Entities.Business.Group>, GroupValidator>();
             Services.AddScoped<IValidator<Solution>, SolutionValidator>();
             Services.AddScoped<IValidator<Student>, StudentValidator>();

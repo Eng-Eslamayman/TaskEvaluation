@@ -6,12 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Consts;
 using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class GroupValidator: AbstractValidator<Group>
+    public class GroupDTOValidator: AbstractValidator<GroupDTO>
     {
-        public GroupValidator() 
+        public GroupDTOValidator() 
         {
             RuleFor(group => group.Title)
                 .NotNull().WithMessage(Errors.RequiredField);

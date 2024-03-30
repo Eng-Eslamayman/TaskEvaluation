@@ -6,15 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Consts;
 using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class EvalutionGradeValidator : AbstractValidator<EvalutionGrade>
+    public class EvaluationGradeDTOValidator : AbstractValidator<EvaluationGardeDTO>
     {
-        public EvalutionGradeValidator()
+        public EvaluationGradeDTOValidator()
         {
-            RuleFor(grade => grade.Grade)
+            RuleFor(g => g.Grade)
            .NotNull().WithMessage(Errors.RequiredField);
         }
+
     }
 }

@@ -7,12 +7,13 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Consts;
 using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class StudentValidator: AbstractValidator<Student>
+    public class StudentDTOValidator: AbstractValidator<StudentDTO>
     {
-        public StudentValidator()
+        public StudentDTOValidator()
         {
             RuleFor(student => student.FullName)
                 .NotNull().WithMessage(Errors.RequiredField);
