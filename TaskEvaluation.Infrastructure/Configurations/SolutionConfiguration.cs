@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Entities.Business;
 
-namespace TaskEvaluation.Infrastructure.Configurations
+namespace TaskEvaluation.Core.Configurations
 {
     public class SolutionConfiguration : IEntityTypeConfiguration<Solution>
     {

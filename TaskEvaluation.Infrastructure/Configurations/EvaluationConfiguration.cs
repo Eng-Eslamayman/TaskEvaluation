@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Entities.Business;
 
-namespace TaskEvaluation.Infrastructure.Configurations
+namespace TaskEvaluation.Core.Configurations
 {
     public class EvaluationGradeConfiguration : IEntityTypeConfiguration<EvaluationGrade>
     {
@@ -18,7 +18,7 @@ namespace TaskEvaluation.Infrastructure.Configurations
                .WithOne(s => s.EvaluationGrade)
                .HasForeignKey(s => s.EvaluationGradeId)
                .IsRequired()
-               .OnDelete(DeleteBehavior.Cascade);
+               .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

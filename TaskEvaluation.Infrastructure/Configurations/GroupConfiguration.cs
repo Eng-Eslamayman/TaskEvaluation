@@ -7,15 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Entities.Business;
 
-namespace TaskEvaluation.Infrastructure.Configurations
+namespace TaskEvaluation.Core.Configurations
 {
-    public class StudentConfiguration : IEntityTypeConfiguration<Student>
+    public class GroupConfiguration : IEntityTypeConfiguration<Group>
     {
-        public void Configure(EntityTypeBuilder<Student> builder)
+        public void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.HasOne(s => s.Group)
-                   .WithMany(g => g.Students)
-                   .HasForeignKey(s => s.GroupId)
+            builder.HasOne(g => g.Course)
+                   .WithMany(c => c.Groups)
+                   .HasForeignKey(g => g.CourseId)
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Restrict);
         }
