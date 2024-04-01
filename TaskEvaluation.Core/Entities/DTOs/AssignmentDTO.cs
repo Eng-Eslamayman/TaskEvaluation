@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Entities.Business;
-using TaskEvaluation.Core.Entities.General;
-
 namespace TaskEvaluation.Core.Entities.DTOs
 {
     public class AssignmentDTO : BaseModel

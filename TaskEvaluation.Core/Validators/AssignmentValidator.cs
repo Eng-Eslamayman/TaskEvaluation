@@ -4,9 +4,9 @@ using TaskEvaluation.Core.Entities.Business;
 using TaskEvaluation.Core.Entities.DTOs;
 namespace TaskEvaluation.Core.Validators
 {
-    public class AssignmentDTOValidator: AbstractValidator<AssignmentDTO>
+    public class AssignmentValidator: AbstractValidator<AssignmentDTO>
     {
-        public AssignmentDTOValidator()
+        public AssignmentValidator()
         {
             RuleFor(assign => assign.Title)
                 .NotNull().WithMessage(Errors.RequiredField);
