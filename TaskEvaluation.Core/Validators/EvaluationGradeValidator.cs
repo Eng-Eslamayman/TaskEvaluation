@@ -10,9 +10,9 @@ using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class EvaluationGradeDTOValidator : AbstractValidator<EvaluationGardeDTO>
+    public class EvaluationGradeValidator : AbstractValidator<EvaluationGardeDTO>
     {
-        public EvaluationGradeDTOValidator()
+        public EvaluationGradeValidator()
         {
             RuleFor(g => g.Grade)
            .NotNull().WithMessage(Errors.RequiredField);

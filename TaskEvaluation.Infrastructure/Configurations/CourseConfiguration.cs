@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TaskEvaluation.Core.Configurations
 {
-    internal class CourseConfiguration
+    public class CourseConfiguration
     {
     }
 }

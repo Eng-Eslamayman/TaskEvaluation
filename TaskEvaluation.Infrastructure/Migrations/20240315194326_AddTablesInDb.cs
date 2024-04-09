@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TaskEvaluation.AccessLayer.Migrations
+namespace TaskEvaluation.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class AddTablesInDb : Migration

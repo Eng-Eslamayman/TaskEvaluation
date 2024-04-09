@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskEvaluation.Core.Entities.Business;
 
-namespace TaskEvaluation.AccessLayer.Data
+namespace TaskEvaluation.Infrastructure.Data
 {
     public class ApplicationDbContext: DbContext
     {

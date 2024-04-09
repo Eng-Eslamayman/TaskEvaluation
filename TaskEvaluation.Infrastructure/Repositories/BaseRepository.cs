@@ -48,11 +48,6 @@ namespace TaskEvaluation.Infrastructure.Repositoies
             return await _dbSet.FindAsync(id);
         }
 
-        public Task<bool> IsExists<Tvalue>(string key, Tvalue value)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task SaveChangeAsync()
         {
             await _dbContext.SaveChangesAsync();

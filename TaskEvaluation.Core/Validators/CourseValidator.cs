@@ -10,9 +10,9 @@ using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class CourseDTOValidator : AbstractValidator<CourseDTO>
+    public class CourseValidator : AbstractValidator<CourseDTO>
     {
-        public CourseDTOValidator()
+        public CourseValidator()
         {
             RuleFor(course => course.Title)
                 .NotNull().WithMessage(Errors.RequiredField);

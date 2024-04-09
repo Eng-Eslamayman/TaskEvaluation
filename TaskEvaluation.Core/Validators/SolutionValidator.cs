@@ -11,12 +11,12 @@ using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class SolutionDTOValidator : AbstractValidator<SolutionDTO>
+    public class SolutionValidator : AbstractValidator<SolutionDTO>
     {
         static readonly Regex validFileExtensions = new Regex
             (@"\.pdf$|\.png$|\.zip$|\.jpeg$|\.jpg$|\.rar$", RegexOptions.IgnoreCase);
 
-        public SolutionDTOValidator()
+        public SolutionValidator()
         {
             RuleFor(sol => sol.SolutionFile)
                 .NotNull().WithMessage(Errors.RequiredField)

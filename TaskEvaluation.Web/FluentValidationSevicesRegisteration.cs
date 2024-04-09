@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 using TaskEvaluation.Core.Validators;
 
 namespace TaskEvaluation.Web
@@ -8,12 +9,12 @@ namespace TaskEvaluation.Web
     {
         public static void AddFluentValidationServices(this IServiceCollection Services)
         {
-            Services.AddScoped<IValidator<Assignment>, AssignmentValidator>();
-            Services.AddScoped<IValidator<Course>, CourseValidator>();
-            Services.AddScoped<IValidator<EvaluationGrade>, EvalutionGradeValidator>();
-            Services.AddScoped<IValidator<Core.Entities.Business.Group>, GroupValidator>();
-            Services.AddScoped<IValidator<Solution>, SolutionValidator>();
-            Services.AddScoped<IValidator<Student>, StudentValidator>();
+            Services.AddScoped<IValidator<AssignmentDTO>, AssignmentValidator>();
+            Services.AddScoped<IValidator<CourseDTO>, CourseValidator>();
+            Services.AddScoped<IValidator<EvaluationGardeDTO>, EvaluationGradeValidator>();
+            Services.AddScoped<IValidator<GroupDTO>, GroupValidator>();
+            Services.AddScoped<IValidator<SolutionDTO>, SolutionValidator>();
+            Services.AddScoped<IValidator<StudentDTO>, StudentValidator>();
         }
     }
 }

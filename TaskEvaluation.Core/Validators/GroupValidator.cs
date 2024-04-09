@@ -10,9 +10,9 @@ using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class GroupDTOValidator: AbstractValidator<GroupDTO>
+    public class GroupValidator: AbstractValidator<GroupDTO>
     {
-        public GroupDTOValidator() 
+        public GroupValidator() 
         {
             RuleFor(group => group.Title)
                 .NotNull().WithMessage(Errors.RequiredField);

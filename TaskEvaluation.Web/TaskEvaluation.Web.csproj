@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskEvaluation.AccessLayer\TaskEvaluation.Infrastructure.csproj" />
+    <ProjectReference Include="..\TaskEvaluation.Core\TaskEvaluation.Core.csproj" />
     <ProjectReference Include="..\TaskEvaluation.Infrastructure\TaskEvaluation.Infrastructure.csproj" />
   </ItemGroup>
 

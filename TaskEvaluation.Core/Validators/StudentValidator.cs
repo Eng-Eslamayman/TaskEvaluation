@@ -11,9 +11,9 @@ using TaskEvaluation.Core.Entities.DTOs;
 
 namespace TaskEvaluation.Core.Validators
 {
-    public class StudentDTOValidator: AbstractValidator<StudentDTO>
+    public class StudentValidator: AbstractValidator<StudentDTO>
     {
-        public StudentDTOValidator()
+        public StudentValidator()
         {
             RuleFor(student => student.FullName)
                 .NotNull().WithMessage(Errors.RequiredField);

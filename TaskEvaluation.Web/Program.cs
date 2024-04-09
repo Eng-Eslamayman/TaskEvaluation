@@ -2,7 +2,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.RegularExpressions;
-using TaskEvaluation.AccessLayer.Data;
+using TaskEvaluation.Infrastructure.Data;
 using TaskEvaluation.Core.Entities.Business;
 using TaskEvaluation.Core.Validators;
 
@@ -21,7 +21,8 @@ namespace TaskEvaluation.Web
             option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 
             builder.Services.AddFluentValidationServices();
-         
+          
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.

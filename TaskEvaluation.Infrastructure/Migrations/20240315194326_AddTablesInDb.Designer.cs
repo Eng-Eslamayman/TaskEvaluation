@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TaskEvaluation.AccessLayer.Data;
+using TaskEvaluation.Infrastructure.Data;
 
 #nullable disable
 
-namespace TaskEvaluation.AccessLayer.Migrations
+namespace TaskEvaluation.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240315194326_AddTablesInDb")]

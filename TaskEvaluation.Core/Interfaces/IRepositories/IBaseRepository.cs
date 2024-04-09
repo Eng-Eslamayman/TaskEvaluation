@@ -10,7 +10,6 @@ namespace TaskEvaluation.Core.Interfaces.IRepositories
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<T> GetByIdAsync<Tid>(Tid id);
-        Task<bool> IsExists<Tvalue> (string key,Tvalue value);
         Task<T> CreateAsync(T model);
         Task CreateRange(List<T> model);
         Task<T> UpdateAsync(T model);
