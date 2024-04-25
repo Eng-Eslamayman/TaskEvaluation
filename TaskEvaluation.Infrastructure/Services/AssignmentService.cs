@@ -1,57 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.Business;
-using TaskEvaluation.Core.Entities.DTOs;
-using TaskEvaluation.Core.Interfaces.IRepositories;
-using TaskEvaluation.Core.Interfaces.IServices;
-
-namespace TaskEvaluation.Infrastructure.Services
+﻿namespace TaskEvaluation.Infrastructure.Services
 {
-    internal class AssignmentService : IAssignmentService
-    {
-        private readonly IBaseRepository<Assignment> _assignmentRepository;
+	public class AssignmentService : IAssignmentService
+	{
+		private readonly IBaseMapper<Assignment, AssignmentDTO> _assignmentDTOMapper;
+		private readonly IBaseMapper<AssignmentDTO, Assignment> _assignmentMapper;
+		private readonly IBaseRepository<Assignment> _assignmentRepository;
 
-        public AssignmentService(IBaseRepository<Assignment> assignmentRepository)
-        {
-            _assignmentRepository = assignmentRepository;
-        }
+		public AssignmentService(
+			IBaseMapper<Assignment, AssignmentDTO> assignmentDTOMapper,
+			IBaseMapper<AssignmentDTO, Assignment> assignmentMapper,
+			IBaseRepository<Assignment> assignmentRepository)
+		{
+			_assignmentDTOMapper = assignmentDTOMapper;
+			_assignmentMapper = assignmentMapper;
+			_assignmentRepository = assignmentRepository;
+		}
 
-        public Task CreateAssignmentAsync(AssignmentDTO assignment)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<AssignmentDTO> CreateAsync(AssignmentDTO model)
+		{
+			var entity = _assignmentMapper.MapModel(model);
+			entity.EntryDate = DateTime.Now;
+			var assignment = await _assignmentRepository.Create(entity);
 
-        public async Task DeletAsync(int id)
-        {
-            var assignmentToDelete = await _assignmentRepository.GetByIdAsync(id);
-            if (assignmentToDelete != null)
-            {
-                await _assignmentRepository.DeleteAsync(assignmentToDelete);
-                await _assignmentRepository.SaveChangeAsync();
-            }
-        }
+            return _assignmentDTOMapper.MapModel(assignment);
+		}
 
-        public Task DeleteAssignmentAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _assignmentRepository.GetById(id);
+			await _assignmentRepository.Delete(entity);
+		}
 
-        public Task<IEnumerable<AssignmentDTO>> GetAllAssignmentsAsync()
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<AssignmentDTO> GetAssignmentAsync(int id) => _assignmentDTOMapper.MapModel(await _assignmentRepository.GetById(id));
 
-        public Task<AssignmentDTO> GetAssignmentByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<IEnumerable<AssignmentDTO>> GetAssignmentsAsync() => _assignmentDTOMapper.MapList(await _assignmentRepository.GetAll());
 
-        public Task UpdateAssignmentAsync(AssignmentDTO assignment)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public async Task UpdateAsync(AssignmentDTO model)
+		{
+			var existingData = _assignmentMapper.MapModel(model);
+			existingData.UpdateDate = DateTime.Now;
+			await _assignmentRepository.Update(existingData);
+		}
+	}
 }

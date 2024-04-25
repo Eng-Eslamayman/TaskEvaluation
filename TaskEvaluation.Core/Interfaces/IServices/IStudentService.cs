@@ -8,11 +8,11 @@ namespace TaskEvaluation.Core.Interfaces.IServices
 {
     public interface IStudentService
     {
-        Task<IEnumerable<StudentDTO>> GetStudentAsync(Expression<Func<StudentDTO, bool>>? filter = null);
-        Task<StudentDTO> GetCourseByIdAsync(int id);
-        Task UpdateAsync(StudentDTO model);
-        Task<StudentDTO> AddAsync(StudentDTO model);
-        Task DeletDeletAsync(int id);
+		Task<IEnumerable<StudentDTO>> GetStudentsAsync();
+		Task<StudentDTO> GetStudentAsync(int id);
+		Task<StudentDTO> CreateAsync(StudentDTO model);
+		Task UpdateAsync(StudentDTO model);
+		Task DeleteAsync(int id);
 
-    }
+	}
 }

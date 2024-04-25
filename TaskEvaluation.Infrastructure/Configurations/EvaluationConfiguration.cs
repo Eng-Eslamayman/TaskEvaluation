@@ -13,12 +13,14 @@ namespace TaskEvaluation.Core.Configurations
     {
         public void Configure(EntityTypeBuilder<EvaluationGrade> builder)
         {
+            builder.HasKey(x => x.Id);  
+            builder.Property(a => a.Grade).IsRequired();
+
 
             builder.HasMany(g => g.Solutions)
                .WithOne(s => s.EvaluationGrade)
                .HasForeignKey(s => s.EvaluationGradeId)
-               .IsRequired()
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

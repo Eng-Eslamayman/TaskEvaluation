@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using TaskEvaluation.Infrastructure.Data;
 using TaskEvaluation.Core.Entities.Business;
 using TaskEvaluation.Core.Validators;
+using TaskEvaluation.Core.Interfaces.IRepositories;
+using TaskEvaluation.Infrastructure.Repositoies;
 
 namespace TaskEvaluation.Web
 {
@@ -21,6 +23,7 @@ namespace TaskEvaluation.Web
             option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 
             builder.Services.AddFluentValidationServices();
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
           
 
             var app = builder.Build();

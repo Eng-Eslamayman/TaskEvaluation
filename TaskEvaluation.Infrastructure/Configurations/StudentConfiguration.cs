@@ -13,11 +13,19 @@ namespace TaskEvaluation.Core.Configurations
     {
         public void Configure(EntityTypeBuilder<Student> builder)
         {
+            builder.HasKey(x => x.Id);
+            builder.Property(a => a.FullName).IsRequired();
+            builder.Property(a => a.MobileNumber).IsRequired();
+
+
             builder.HasOne(s => s.Group)
-                   .WithMany(g => g.Students)
-                   .HasForeignKey(s => s.GroupId)
-                   .IsRequired()
-                   .OnDelete(DeleteBehavior.Cascade);
+              .WithMany(g => g.Students)
+              .HasForeignKey(s => s.GroupId)
+              .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasMany(s => s.Solutions)
+              .WithOne(sol => sol.Student)
+              .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

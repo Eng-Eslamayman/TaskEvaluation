@@ -1,52 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.Business;
-using TaskEvaluation.Core.Entities.DTOs;
-using TaskEvaluation.Core.Interfaces.IRepositories;
-using TaskEvaluation.Core.Interfaces.IServices;
-
-namespace TaskEvaluation.Infrastructure.Services
+﻿namespace TaskEvaluation.Infrastructure.Services
 {
-    internal class StudentService : IStudentService
+	internal class StudentService : IStudentService
     {
-        private readonly IBaseRepository<Student> _studentRepository;
+		private readonly IBaseMapper<Student, StudentDTO> _studentDTOMapper;
+		private readonly IBaseMapper<StudentDTO, Student> _studentMapper;
+		private readonly IBaseRepository<Student> _studentRepository;
 
-        public StudentService(IBaseRepository<Student> studentRepository)
-        {
-            _studentRepository = studentRepository;
-        }
-
-        public Task<StudentDTO> AddAsync(StudentDTO model)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeletDeletAsync(int id)
-        {
-            var studentToDelete = await _studentRepository.GetByIdAsync(id);
-            if (studentToDelete != null)
-            {
-                await _studentRepository.DeleteAsync(studentToDelete);
-            }
-        }
-
-        public Task<StudentDTO> GetCourseByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-		public Task<IEnumerable<StudentDTO>> GetStudentAsync(Expression<Func<StudentDTO, bool>>? filter = null)
+		public StudentService(
+			IBaseMapper<Student, StudentDTO> studentDTOMapper,
+			IBaseMapper<StudentDTO, Student> studentMapper,
+			IBaseRepository<Student> studentRepository)
 		{
-			throw new NotImplementedException();
+			_studentDTOMapper = studentDTOMapper;
+			_studentMapper = studentMapper;
+			_studentRepository = studentRepository;
 		}
 
-		public Task UpdateAsync(StudentDTO model)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public async Task<StudentDTO> CreateAsync(StudentDTO model)
+		{
+			var entity = _studentMapper.MapModel(model);
+			entity.EntryDate = DateTime.Now;
+			return _studentDTOMapper.MapModel(await _studentRepository.Create(entity));
+		}
+
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _studentRepository.GetById(id);
+			await _studentRepository.Delete(entity);
+		}
+
+		public async Task<StudentDTO> GetStudentAsync(int id) => _studentDTOMapper.MapModel(await _studentRepository.GetById(id));
+
+		public async Task<IEnumerable<StudentDTO>> GetStudentsAsync() => _studentDTOMapper.MapList(await _studentRepository.GetAll());
+
+		public async Task UpdateAsync(StudentDTO model)
+		{
+			var existingData = _studentMapper.MapModel(model);
+			existingData.UpdateDate = DateTime.Now;
+			await _studentRepository.Update(existingData);
+		}
+	}
 }

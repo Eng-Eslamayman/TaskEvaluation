@@ -1,51 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.Business;
-using TaskEvaluation.Core.Entities.DTOs;
-using TaskEvaluation.Core.Interfaces.IRepositories;
-using TaskEvaluation.Core.Interfaces.IServices;
-
-namespace TaskEvaluation.Infrastructure.Services
+﻿namespace TaskEvaluation.Infrastructure.Services
 {
-    public class CourseService : ICourseService
+	public class CourseService : ICourseService
     {
-        private readonly IBaseRepository<Course> _courseRepository;
+		private readonly IBaseMapper<Course, CourseDTO> _courseDTOMapper;
+		private readonly IBaseMapper<CourseDTO, Course> _courseMapper;
+		private readonly IBaseRepository<Course> _courseRepository;
 
-        public CourseService(IBaseRepository<Course> courseRepository)
-        {
-            _courseRepository = courseRepository;
-        }
+		public CourseService(
+			IBaseMapper<Course, CourseDTO> courseDTOMapper,
+			IBaseMapper<CourseDTO, Course> courseMapper,
+			IBaseRepository<Course> courseRepository)
+		{
+			_courseDTOMapper = courseDTOMapper;
+			_courseMapper = courseMapper;
+			_courseRepository = courseRepository;
+		}
 
-        public Task<CourseDTO> CreateAsync(CourseDTO model)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<CourseDTO> CreateAsync(CourseDTO model)
+		{
+			var entity = _courseMapper.MapModel(model);
+			entity.EntryDate = DateTime.Now;
+			return _courseDTOMapper.MapModel(await _courseRepository.Create(entity));
+		}
 
-        public async Task DeletAsync(int id)
-        {
-            var courseToDelete = await _courseRepository.GetByIdAsync(id);
-            if (courseToDelete != null)
-            {
-                await _courseRepository.DeleteAsync(courseToDelete);
-            }
-        }
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _courseRepository.GetById(id);
+			await _courseRepository.Delete(entity);
+		}
 
-        public Task<CourseDTO> GetCourseByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<CourseDTO> GetCourseAsync(int id) => _courseDTOMapper.MapModel(await _courseRepository.GetById(id));
 
-        public Task<IEnumerable<CourseDTO>> GetCourses()
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<IEnumerable<CourseDTO>> GetCoursesAsync() => _courseDTOMapper.MapList(await _courseRepository.GetAll());
 
-        public Task UpdateAsync(CourseDTO model)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public async Task UpdateAsync(CourseDTO model)
+		{
+			var existingData = _courseMapper.MapModel(model);
+			existingData.UpdateDate = DateTime.Now;
+			await _courseRepository.Update(existingData);
+		}
+	}
 }

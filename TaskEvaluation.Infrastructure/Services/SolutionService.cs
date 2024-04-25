@@ -1,38 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.DTOs;
-using TaskEvaluation.Core.Interfaces.IServices;
-
-namespace TaskEvaluation.Infrastructure.Services
+﻿namespace TaskEvaluation.Infrastructure.Services
 {
-    public class SolutionService : ISolutionService
+	public class SolutionService : ISolutionService
     {
-        public Task<SolutionDTO> CreateSolutionAsync(SolutionDTO solutionDTO)
-        {
-            throw new NotImplementedException();
-        }
+		private readonly IBaseMapper<Solution, SolutionDTO> _solutionDTOMapper;
+		private readonly IBaseMapper<SolutionDTO, Solution> _solutionMapper;
+		private readonly IBaseRepository<Solution> _solutionRepository;
 
-        public Task DeleteSolutionAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public SolutionService(
+			IBaseMapper<Solution, SolutionDTO> solutionDTOMapper,
+			IBaseMapper<SolutionDTO, Solution> solutionMapper,
+			IBaseRepository<Solution> solutionRepository)
+		{
+			_solutionDTOMapper = solutionDTOMapper;
+			_solutionMapper = solutionMapper;
+			_solutionRepository = solutionRepository;
+		}
 
-        public Task<SolutionDTO> GetSolutionByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<SolutionDTO> CreateAsync(SolutionDTO model)
+		{
+			var entity = _solutionMapper.MapModel(model);
+			entity.EntryDate = DateTime.Now;
+			return _solutionDTOMapper.MapModel(await _solutionRepository.Create(entity));
+		}
 
-        public Task<IEnumerable<SolutionDTO>> GetSolutionsAsync()
-        {
-            throw new NotImplementedException();
-        }
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _solutionRepository.GetById(id);
+			await _solutionRepository.Delete(entity);
+		}
 
-        public Task UpdateSolutionAsync(SolutionDTO solutionDTO)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public async Task<SolutionDTO> GetSolutionAsync(int id) => _solutionDTOMapper.MapModel(await _solutionRepository.GetById(id));
+
+		public async Task<IEnumerable<SolutionDTO>> GetSolutionsAsync() => _solutionDTOMapper.MapList(await _solutionRepository.GetAll());
+
+		public async Task UpdateAsync(SolutionDTO model)
+		{
+			var existingData = _solutionMapper.MapModel(model);
+			existingData.UpdateDate = DateTime.Now;
+			await _solutionRepository.Update(existingData);
+		}
+	}
 }

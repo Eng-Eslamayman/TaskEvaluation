@@ -1,63 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Interfaces.IRepositories;
-
-namespace TaskEvaluation.Infrastructure.Repositoies
+﻿namespace TaskEvaluation.Infrastructure.Repositoies
 {
-    public class BaseRepository<T> : IBaseRepository<T> where T : class
+	public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
-        private readonly DbContext _dbContext;
-        private readonly DbSet<T> _dbSet;
+		protected readonly ApplicationDbContext _dbContext;
+		protected DbSet<T> DbSet => _dbContext.Set<T>();
 
-        public BaseRepository(DbContext dbContext)
-        {
-            _dbContext = dbContext;
-            _dbSet = dbContext.Set<T>();
-        }
-        public async Task<T> CreateAsync(T model)
-        {
-            await _dbSet.AddAsync(model);
-            await _dbContext.SaveChangesAsync();
-            return model;
-        }
+		public BaseRepository(ApplicationDbContext dbContext)
+		{
+			_dbContext = dbContext;
+		}
 
-        public async Task CreateRange(List<T> model)
-        {
-            await _dbSet.AddRangeAsync(model);
-            await _dbContext.SaveChangesAsync();
-        }
+		public async Task<T> Create(T model)
+		{
+			await DbSet.AddAsync(model);
+			await SaveChangesAsync();
+			return model;
+		}
 
-        public async Task DeleteAsync(T model)
-        {
-            _dbSet.Remove(model);
-            await _dbContext.SaveChangesAsync();
-        }
+		public async Task Delete(T model)
+		{
+			DbSet.Remove(model);
+			await SaveChangesAsync();
+		}
 
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            return await _dbSet.ToListAsync();
-        }
+		public async Task<IEnumerable<T>> GetAll() => await DbSet.AsNoTracking().ToListAsync();
 
-        public async Task<T> GetByIdAsync<Tid>(Tid id)
-        {
+		public async Task<T> GetById<IdType>(IdType id)
+		{
+			var data = await DbSet.FindAsync(id);
+			return data is null ? throw new InvalidOperationException("No data Found") : data;
+		}
 
-            return await _dbSet.FindAsync(id);
-        }
+		public async Task SaveChangesAsync() => await SaveChangesAsync();
 
-        public async Task SaveChangeAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async Task<T> UpdateAsync(T model)
-        {
-            _dbContext.Entry(model).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-            return model;
-        }
-    }
+		public async Task Update(T model)
+		{
+			DbSet.Update(model);
+			await SaveChangesAsync();
+		}
+	}
 }

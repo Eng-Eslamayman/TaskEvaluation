@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore.Query;
 
 namespace TaskEvaluation.Core.Interfaces.IRepositories
 {
-    public interface IBaseRepository<T> where T : class
+	public interface IBaseRepository<T> where T : class
     {
-        Task<IEnumerable<T>> GetAllAsync();
-        Task<T> GetByIdAsync<Tid>(Tid id);
-        Task<T> CreateAsync(T model);
-        Task CreateRange(List<T> model);
-        Task<T> UpdateAsync(T model);
-        Task DeleteAsync(T model);
-        Task SaveChangeAsync();
-
-
-    }
+		Task<IEnumerable<T>> GetAll();
+		Task<T> GetById<IdType>(IdType id);
+		Task<T> Create(T model);
+		Task Update(T model);
+		Task Delete(T model);
+		Task SaveChangesAsync();
+	}
 }

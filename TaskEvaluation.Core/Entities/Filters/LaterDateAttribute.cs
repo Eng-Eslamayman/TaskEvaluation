@@ -20,7 +20,7 @@ namespace TaskEvaluation.Core.Entities.Filters
 				return new ValidationResult(ErrorMessage = $"Date must be later than now");
 			}
 
-			return ValidationResult.Success;
+			return ValidationResult.Success!;
 		}
 	}
 }

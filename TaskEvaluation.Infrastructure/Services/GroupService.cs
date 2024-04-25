@@ -1,38 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.DTOs;
-using TaskEvaluation.Core.Interfaces.IServices;
-
-namespace TaskEvaluation.Infrastructure.Services
+﻿namespace TaskEvaluation.Infrastructure.Services
 {
-    public class GroupService : IGroupService
+	public class GroupService : IGroupService
     {
-        public Task CreateGroupAsync(GroupDTO group)
-        {
-            throw new NotImplementedException();
-        }
+		private readonly IBaseMapper<Group, GroupDTO> _groupDTOMapper;
+		private readonly IBaseMapper<GroupDTO, Group> _groupMapper;
+		private readonly IBaseRepository<Group> _groupRepository;
 
-        public Task DeleteGroupAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public GroupService(
+			IBaseMapper<Group, GroupDTO> groupDTOMapper,
+			IBaseMapper<GroupDTO, Group> groupMapper,
+			IBaseRepository<Group> groupRepository)
+		{
+			_groupDTOMapper = groupDTOMapper;
+			_groupMapper = groupMapper;
+			_groupRepository = groupRepository;
+		}
 
-        public Task<IEnumerable<GroupDTO>> GetAllGroupsAsync()
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<GroupDTO> CreateAsync(GroupDTO model)
+		{
+			var entity = _groupMapper.MapModel(model);
+			entity.EntryDate = DateTime.Now;
+			return _groupDTOMapper.MapModel(await _groupRepository.Create(entity));
+		}
 
-        public Task<GroupDTO> GetGroupByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+		public async Task DeleteAsync(int id)
+		{
+			var entity = await _groupRepository.GetById(id);
+			await _groupRepository.Delete(entity);
+		}
 
-        public Task UpdateGroupAsync(GroupDTO group)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public async Task<GroupDTO> GetGroupAsync(int id) => _groupDTOMapper.MapModel(await _groupRepository.GetById(id));
+
+		public async Task<IEnumerable<GroupDTO>> GetGroupsAsync() => _groupDTOMapper.MapList(await _groupRepository.GetAll());
+
+		public async Task UpdateAsync(GroupDTO model)
+		{
+			var existingData = _groupMapper.MapModel(model);
+			existingData.UpdateDate = DateTime.Now;
+			await _groupRepository.Update(existingData);
+		}
+	}
 }

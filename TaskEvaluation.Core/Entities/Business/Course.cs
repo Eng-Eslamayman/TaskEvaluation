@@ -9,7 +9,7 @@ namespace TaskEvaluation.Core.Entities.Business
     public class Course : BaseModel
     {
         public string Title { get; set; } = null!;
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; set; } = false;
         public ICollection<Group>? Groups { get; set; }
     }
 }

@@ -8,10 +8,10 @@ namespace TaskEvaluation.Core.Interfaces.IServices
 {
     public interface ICourseService
     {
-        Task<IEnumerable<CourseDTO>> GetCourses();
-        Task<CourseDTO> GetCourseByIdAsync(int id);
-        Task UpdateAsync(CourseDTO model);
-        Task<CourseDTO> CreateAsync(CourseDTO model);
-        Task DeletAsync(int id);
-    }
+		Task<IEnumerable<CourseDTO>> GetCoursesAsync();
+		Task<CourseDTO> GetCourseAsync(int id);
+		Task<CourseDTO> CreateAsync(CourseDTO model);
+		Task UpdateAsync(CourseDTO model);
+		Task DeleteAsync(int id);
+	}
 }
