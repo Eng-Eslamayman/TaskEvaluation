@@ -27,34 +27,36 @@ namespace TaskEvaluation.Web
 			builder.Services.AddFluentValidationServices();
 			builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-
+			// identity configuration 
+			builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+				.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 			var app = builder.Build();
 
-			// identity configuration 
-			builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-				options =>
-				{
-					options.LoginPath = new PathString("/Account/Login");
-					options.AccessDeniedPath = new PathString("/Account/Login");
-				});
-
-			builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-				.AddEntityFrameworkStores<ApplicationDbContext>()
-				.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
-
 			// Password configuration 
-			builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-			{
-				// Default Password settings.
-				options.Password.RequireDigit = true;
-				options.Password.RequireLowercase = true;
-				options.Password.RequireNonAlphanumeric = true;
-				options.Password.RequireUppercase = true;
-				options.Password.RequiredLength = 6;
-				options.Password.RequiredUniqueChars = 0;
+			//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+			//{
+			//	// Default Password settings.
+			//	options.Password.RequireDigit = true;
+			//	options.Password.RequireLowercase = true;
+			//	options.Password.RequireNonAlphanumeric = true;
+			//	options.Password.RequireUppercase = true;
+			//	options.Password.RequiredLength = 6;
+			//	options.Password.RequiredUniqueChars = 0;
 
-			}).AddEntityFrameworkStores<ApplicationDbContext>();
+			//}).AddEntityFrameworkStores<ApplicationDbContext>();
+
+			// identity configuration 
+			//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+			//	.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+			//	options =>
+			//	{
+			//		options.LoginPath = new PathString("/Account/Login");
+			//		options.AccessDeniedPath = new PathString("/Account/Login");
+			//	});
+
+			//builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+			//	.AddEntityFrameworkStores<ApplicationDbContext>()
+			//	.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())

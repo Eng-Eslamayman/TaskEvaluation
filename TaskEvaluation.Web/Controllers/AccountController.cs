@@ -21,27 +21,25 @@ namespace TaskEvaluation.Web.Controllers
 			return View();
 		}
 		[HttpPost]
-		public async Task<IActionResult> Registration(RegisterDTO model)
+		public async Task<IActionResult> Register(RegisterDTO model)
 		{
-			var user = new IdentityUser()
+			if (ModelState.IsValid)
 			{
-				UserName = model.UserName,
-				Email = model.Email
-			};
+				var user = new IdentityUser { UserName = model.Email, Email = model.Email , PhoneNumber = model.MobileNumber};
+				var result = await _userManager.CreateAsync(user, model.Password);
 
-			var result = await _userManager.CreateAsync(user, model.Password);
-
-			if (result.Succeeded)
-			{
-				return RedirectToAction("Login");
-			}
-			else
-			{
-				foreach (var item in result.Errors)
+				if (result.Succeeded)
 				{
-					ModelState.AddModelError("", item.Description);
+					await _signInManager.SignInAsync(user, isPersistent: false);
+					return RedirectToAction("Index", "Home");
+				}
+
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError(string.Empty, error.Description);
 				}
 			}
+
 			return View(model);
 		}
 		#endregion

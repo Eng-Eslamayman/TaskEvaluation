@@ -9,12 +9,13 @@ namespace TaskEvaluation.Core.Entities.DTOs
 {
 	public class RegisterDTO
 	{
-		[Required]
 		[MaxLength(50)]
-		public string? UserName { get; set; }
+		public string? UserName { get; set; } = null;	
 		[Required]
 		[EmailAddress]
 		public string Email { get; set; }
+		[RegularExpression(RegexPatterns.MobileNumber, ErrorMessage = Errors.MobileNumber)]
+		public string MobileNumber { get; set; } = null!;
 		[Required]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
