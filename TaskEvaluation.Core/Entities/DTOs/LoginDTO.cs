@@ -9,8 +9,9 @@ namespace TaskEvaluation.Core.Entities.DTOs
 {
 	public  class LoginDTO
 	{
-		[Required]
-		[EmailAddress]
+        [Display(Name = "Email address")]
+        [Required(ErrorMessage = "Email address is required")]
+        [EmailAddress]
 		public string Email { get; set; }
 		[Required]
 		[DataType(DataType.Password)]
