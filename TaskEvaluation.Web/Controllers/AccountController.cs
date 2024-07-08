@@ -15,58 +15,75 @@ namespace TaskEvaluation.Web.Controllers
 			_signInManager = signInManager;
 		}
 		#region Registration
-		[HttpGet]
+		public IActionResult RegisterCompleted()
+		{
+			return View();	
+		}
+        [HttpGet]
 		public IActionResult Registration()
 		{
 			return View();
 		}
-		[HttpPost]
-		public async Task<IActionResult> Register(RegisterDTO model)
-		{
-			if (ModelState.IsValid)
-			{
-				var user = new IdentityUser { UserName = model.Email, Email = model.Email , PhoneNumber = model.MobileNumber};
-				var result = await _userManager.CreateAsync(user, model.Password);
+        [HttpPost]
+        public async Task<IActionResult> Registration(RegisterDTO registerdto)
+        {
+            if (!ModelState.IsValid) return View(registerdto);
 
-				if (result.Succeeded)
-				{
-					await _signInManager.SignInAsync(user, isPersistent: false);
-					return RedirectToAction("Index", "Home");
-				}
+            var user = await _userManager.FindByEmailAsync(registerdto.Email);
+            if (user != null)
+            {
+                TempData["Error"] = "This email address is already in use";
+                return View(registerdto);
+            }
 
-				foreach (var error in result.Errors)
-				{
-					ModelState.AddModelError(string.Empty, error.Description);
-				}
-			}
+            var newUser = new IdentityUser()
+            {
+                UserName = registerdto.UserName,
+                Email = registerdto.Email,
+                PhoneNumber=registerdto.MobileNumber
+            };
+            var newUserResponse = await _userManager.CreateAsync(newUser, registerdto.Password);
 
-			return View(model);
-		}
-		#endregion
+            if (newUserResponse.Succeeded)
+			{ 
+                await _signInManager.SignInAsync(newUser, isPersistent: false);
+            return View("RegisterCompleted");
+            }
+            return View(registerdto);
+        }
+       
+        #endregion
 
-		#region Login
-		[HttpGet]
+        #region Login
+        [HttpGet]
 		public IActionResult Login()
 		{
 			return View();
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> Login(LoginDTO model)
+		public async Task<IActionResult> Login(LoginDTO loginVM)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid) return View(loginVM);
+
+			var user = await _userManager.FindByEmailAsync(loginVM.Email);
+			if (user != null)
 			{
-				var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password,model.RememberMe, lockoutOnFailure: false);
-
-				if (result.Succeeded)
+				var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+				if (passwordCheck)
 				{
-					return RedirectToAction("Index", "Home");
+					var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+					if (result.Succeeded)
+					{
+						return RedirectToAction("Index", "Home");
+					}
 				}
-
-				ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+				TempData["Error"] = "Wrong credentials. Please, try again!";
+				return View(loginVM);
 			}
 
-			return View(model);
+			TempData["Error"] = "Wrong credentials. Please, try again!";
+			return View(loginVM);
 		}
 		#endregion
 	}

@@ -9,76 +9,58 @@ using TaskEvaluation.Core.Interfaces.IRepositories;
 using TaskEvaluation.Infrastructure.Repositoies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace TaskEvaluation.Web
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			var builder = WebApplication.CreateBuilder(args);
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
 
-			builder.Services.AddDbContext<ApplicationDbContext>(option =>
-			option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
+            builder.Services.AddDbContext<ApplicationDbContext>(option =>
+            option.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionString")));
 
-			builder.Services.AddFluentValidationServices();
-			builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+            builder.Services.AddFluentValidationServices();
+            builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
 
-			// identity configuration 
-			builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-				.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-			var app = builder.Build();
+           
+            //Authentication and authorization
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddSession();
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            });
+            var app = builder.Build();
 
-			// Password configuration 
-			//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-			//{
-			//	// Default Password settings.
-			//	options.Password.RequireDigit = true;
-			//	options.Password.RequireLowercase = true;
-			//	options.Password.RequireNonAlphanumeric = true;
-			//	options.Password.RequireUppercase = true;
-			//	options.Password.RequiredLength = 6;
-			//	options.Password.RequiredUniqueChars = 0;
+ 
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
 
-			//}).AddEntityFrameworkStores<ApplicationDbContext>();
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-			// identity configuration 
-			//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			//	.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-			//	options =>
-			//	{
-			//		options.LoginPath = new PathString("/Account/Login");
-			//		options.AccessDeniedPath = new PathString("/Account/Login");
-			//	});
+            app.UseRouting();
+            app.UseAuthentication();
 
-			//builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-			//	.AddEntityFrameworkStores<ApplicationDbContext>()
-			//	.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+            app.UseAuthorization();
 
-			// Configure the HTTP request pipeline.
-			if (!app.Environment.IsDevelopment())
-			{
-				app.UseExceptionHandler("/Home/Error");
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-				app.UseHsts();
-			}
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Account}/{action=Login}/{id?}");
 
-			app.UseHttpsRedirection();
-			app.UseStaticFiles();
-
-			app.UseRouting();
-			app.UseAuthentication();
-
-			app.UseAuthorization();
-
-			app.MapControllerRoute(
-				name: "default",
-				pattern: "{controller=Account}/{action=Login}/{id?}");
-
-			app.Run();
-		}
-	}
+            app.Run();
+        }
+    }
 }
