@@ -1,6 +1,6 @@
 ﻿@model TaskEvaluation.Core.Entities.DTOs.RegisterDTO
 
-<form asp-action="Login">
+<form method="post" asp-action="Login">
     
     <div data-mdb-input-init class="form-outline mb-4">
         <label asp-for="UserName" class="form-label" for="form2Example1">User Name</label>
@@ -14,7 +14,7 @@
     </div>
     <div data-mdb-input-init class="form-outline mb-4">
         <label asp-for="MobileNumber" class="form-label" for="form2Example1">Phone Number</label>
-        <input asp-for="MobileNumber" type="email" id="form2Example1" class="form-control" />
+        <input asp-for="MobileNumber" type="number" id="form2Example1" class="form-control" />
         <span asp-validation-for="MobileNumber"></span>
     </div>
     

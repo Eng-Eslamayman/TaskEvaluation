@@ -9,12 +9,13 @@ using TaskEvaluation.Core.Interfaces.IRepositories;
 using TaskEvaluation.Infrastructure.Repositoies;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using TaskEvaluation.Infrastructure.Seeds;
 
 namespace TaskEvaluation.Web
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
@@ -29,34 +30,10 @@ namespace TaskEvaluation.Web
 
 			// identity configuration 
 			builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-				.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+				.AddEntityFrameworkStores<ApplicationDbContext>()
+				.AddDefaultTokenProviders()
+				.AddSignInManager<SignInManager<IdentityUser>>();
 			var app = builder.Build();
-
-			// Password configuration 
-			//builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-			//{
-			//	// Default Password settings.
-			//	options.Password.RequireDigit = true;
-			//	options.Password.RequireLowercase = true;
-			//	options.Password.RequireNonAlphanumeric = true;
-			//	options.Password.RequireUppercase = true;
-			//	options.Password.RequiredLength = 6;
-			//	options.Password.RequiredUniqueChars = 0;
-
-			//}).AddEntityFrameworkStores<ApplicationDbContext>();
-
-			// identity configuration 
-			//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-			//	.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-			//	options =>
-			//	{
-			//		options.LoginPath = new PathString("/Account/Login");
-			//		options.AccessDeniedPath = new PathString("/Account/Login");
-			//	});
-
-			//builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-			//	.AddEntityFrameworkStores<ApplicationDbContext>()
-			//	.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
 
 			// Configure the HTTP request pipeline.
 			if (!app.Environment.IsDevelopment())
@@ -73,6 +50,15 @@ namespace TaskEvaluation.Web
 			app.UseAuthentication();
 
 			app.UseAuthorization();
+
+			var scopeFactory = app.Services.GetRequiredService<IServiceScopeFactory>();
+
+			using var scope = scopeFactory.CreateScope();
+
+			var roleManger = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+			var userManger = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+			await DefaultRoles.SeedAsync(roleManger);
 
 			app.MapControllerRoute(
 				name: "default",
