@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using TaskEvaluation.Infrastructure.Repositories;
 using TaskEvaluation.Web.Services;
+using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
+using TaskEvaluation.Core.Interfaces.IServices;
+using TaskEvaluation.Core.Mapper;
+using TaskEvaluation.Infrastructure.Services;
 
 namespace TaskEvaluation.Web
 {
@@ -27,6 +32,13 @@ namespace TaskEvaluation.Web
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IEmailBodyBuilder, EmailBodyBuilder>();
+
+
+            //Register the services
+            //builder.Services.AddScoped<ICourseService, CourseService>();
+            //builder.Services.AddScoped<IBaseMapper<Course, CourseDTO>>();
+            //builder.Services.AddScoped<IBaseMapper<CourseDTO, Course>>();
+
 
 
             //Authentication and authorization
