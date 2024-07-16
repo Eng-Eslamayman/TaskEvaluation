@@ -14,6 +14,7 @@ namespace TaskEvaluation.Core.Mapper
         public MappingProfile()
         {
             CreateMap<Course, CourseDTO>().ReverseMap();
+            CreateMap<Solution, SolutionDTO>().ReverseMap();    
             
         }
     }
