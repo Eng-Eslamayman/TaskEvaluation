@@ -31,17 +31,16 @@ namespace TaskEvaluation.Web.Controllers
         {
             return View();  
         }
-        [HttpPost]
+         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CourseDTO courseDTO)
+        public async Task<IActionResult> Create(CourseDTO course)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                await _courseService.CreateAsync(courseDTO);
+                await _courseService.CreateAsync(course);
                 return RedirectToAction(nameof(Index));
             }
-            return View(courseDTO); 
-
+            return View(course);
         }
         public async Task<IActionResult> Details(int id)
         {

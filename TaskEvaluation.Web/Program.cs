@@ -35,9 +35,15 @@ namespace TaskEvaluation.Web
 
 
             //Register the services
-            //builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
             //builder.Services.AddScoped<IBaseMapper<Course, CourseDTO>>();
             //builder.Services.AddScoped<IBaseMapper<CourseDTO, Course>>();
+
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(typeof(MappingProfile)); // Register your mapping profiles
+
+            // Register the custom BaseMapper as a transient service
+            builder.Services.AddTransient(typeof(IBaseMapper<,>), typeof(BaseMapper<,>));
 
 
 
