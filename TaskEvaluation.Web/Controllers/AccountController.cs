@@ -1,34 +1,38 @@
 ﻿using Castle.Core.Smtp;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Encodings.Web;
 using TaskEvaluation.Core.Entities.DTOs;
 using TaskEvaluation.Web.Services;
 using IEmailSender = TaskEvaluation.Web.Services.IEmailSender;
 
 namespace TaskEvaluation.Web.Controllers
 {
-	public class AccountController : Controller
-	{
-		private readonly UserManager<IdentityUser> _userManager;
+    public class AccountController : Controller
+    {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IEmailBodyBuilder _emailBodyBuilder;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender emailSender)
+
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IEmailSender emailSender, IEmailBodyBuilder emailBodyBuilder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _emailBodyBuilder = emailBodyBuilder;
         }
         #region Registration
         public IActionResult RegisterCompleted()
-		{
-			return View();	
-		}
+        {
+            return View();
+        }
         [HttpGet]
-		public IActionResult Registration()
-		{
-			return View();
-		}
+        public IActionResult Registration()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Registration(RegisterDTO registerdto)
         {
@@ -45,51 +49,51 @@ namespace TaskEvaluation.Web.Controllers
             {
                 UserName = registerdto.UserName,
                 Email = registerdto.Email,
-                PhoneNumber=registerdto.MobileNumber
+                PhoneNumber = registerdto.MobileNumber
             };
             var newUserResponse = await _userManager.CreateAsync(newUser, registerdto.Password);
 
             if (newUserResponse.Succeeded)
-			{ 
+            {
                 await _signInManager.SignInAsync(newUser, isPersistent: false);
-            return View("RegisterCompleted");
+                return View("RegisterCompleted");
             }
             return View(registerdto);
         }
-       
+
         #endregion
 
         #region Login
         [HttpGet]
-		public IActionResult Login()
-		{
-			return View();
-		}
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-		[HttpPost]
-		public async Task<IActionResult> Login(LoginDTO loginVM)
-		{
-			if (!ModelState.IsValid) return View(loginVM);
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginDTO loginVM)
+        {
+            if (!ModelState.IsValid) return View(loginVM);
 
-			var user = await _userManager.FindByEmailAsync(loginVM.Email);
-			if (user != null)
-			{
-				var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
-				if (passwordCheck)
-				{
-					var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
-					if (result.Succeeded)
-					{
-						return RedirectToAction("Index", "Home");
-					}
-				}
-				TempData["Error"] = "Wrong credentials. Please, try again!";
-				return View(loginVM);
-			}
+            var user = await _userManager.FindByEmailAsync(loginVM.Email);
+            if (user != null)
+            {
+                var passwordCheck = await _userManager.CheckPasswordAsync(user, loginVM.Password);
+                if (passwordCheck)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(user, loginVM.Password, false, false);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                }
+                TempData["Error"] = "Wrong credentials. Please, try again!";
+                return View(loginVM);
+            }
 
-			TempData["Error"] = "Wrong credentials. Please, try again!";
-			return View(loginVM);
-		}
+            TempData["Error"] = "Wrong credentials. Please, try again!";
+            return View(loginVM);
+        }
         #endregion
 
 
@@ -117,10 +121,38 @@ namespace TaskEvaluation.Web.Controllers
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var callbackUrl = Url.Action("ResetPassword", "Account", new { token, email = model.Email }, protocol: HttpContext.Request.Scheme);
-            await _emailSender.SendEmailAsync(model.Email, "Reset Password", $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                // Log the error or handle it appropriately
+                ModelState.AddModelError(string.Empty, "Email address is invalid.");
+                return View(model);
+            }
+
+            var placeHolders = new Dictionary<string, string>()
+            {
+                    { "imageUrl", "https://res.cloudinary.com/dzqc5nfai/image/upload/v1717798788/qkp9tphwwlqkrmkdukpx.svg" },
+                    { "header", $"Hey {user.UserName}, thanks for joining up!" },
+                    { "body", "Please confirm your email" },
+                    { "url", $"{HtmlEncoder.Default.Encode(callbackUrl!)}" },
+                    { "linkTitle", "Active Account" }
+            };
+
+            var body = _emailBodyBuilder.GetEmailBody("email", placeHolders);
+
+            // Add logging before sending email
+            Console.WriteLine($"Sending email to: {user.Email}");
+            if (string.IsNullOrEmpty(user.Email))
+            {
+                throw new ArgumentNullException(nameof(user.Email), "User email address cannot be null or empty.");
+            }
+
+            await _emailSender.SendEmailAsync(user.Email, "Confirm your email", body);
 
             return RedirectToAction("ForgotPasswordConfirmation");
         }
+
+
 
         // GET: /Account/ForgotPasswordConfirmation
         [HttpGet]

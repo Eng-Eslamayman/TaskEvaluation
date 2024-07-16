@@ -17,12 +17,10 @@ namespace TaskEvaluation.Web.Controllers
 
         public CourseController(ICourseService courseService )
         {
-            _courseService = courseService;
-            
-           
+            _courseService = courseService;         
         }
         
-        public async Task<IActionResult> Index ()
+        public async Task<IActionResult> Index()
         {
             var course = await _courseService.GetCoursesAsync();    
             return View(course);    

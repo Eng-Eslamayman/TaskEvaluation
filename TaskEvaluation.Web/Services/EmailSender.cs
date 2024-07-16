@@ -18,6 +18,11 @@ namespace TaskEvaluation.Web.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
+            if (string.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email), "Email address cannot be null or empty.");
+            }
+
             MailMessage message = new MailMessage
             {
                 From = new MailAddress(_smtpSetting.Email!, _smtpSetting.Display),
@@ -39,5 +44,6 @@ namespace TaskEvaluation.Web.Services
 
             smtpClient.Dispose();
         }
+
     }
 }

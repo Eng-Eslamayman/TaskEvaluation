@@ -18,8 +18,8 @@
 
 		public async Task<CourseDTO> CreateAsync(CourseDTO model)
 		{
-			var entity = _courseMapper.MapModel(model);
-			entity.EntryDate = DateTime.Now;
+			var entity = _courseMapper.MapModel(model);	
+			entity.EntryDate = DateTime.Now;	
 			return _courseDTOMapper.MapModel(await _courseRepository.Create(entity));
 		}
 

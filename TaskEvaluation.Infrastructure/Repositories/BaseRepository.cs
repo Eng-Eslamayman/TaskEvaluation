@@ -31,7 +31,7 @@
 			return data is null ? throw new InvalidOperationException("No data Found") : data;
 		}
 
-		public async Task SaveChangesAsync() => await SaveChangesAsync();
+		public async Task SaveChangesAsync() => await _dbContext.SaveChangesAsync();
 
 		public async Task Update(T model)
 		{
