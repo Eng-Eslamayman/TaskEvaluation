@@ -35,7 +35,9 @@ public class Program
 
         // Register the services
         builder.Services.AddScoped<ICourseService, CourseService>();
-        builder.Services.AddScoped<ISolutionService, SolutionService>();    
+        builder.Services.AddScoped<ISolutionService, SolutionService>(); 
+        builder.Services.AddScoped<IStudentService, StudentService>();  
+        builder.Services.AddScoped<IAssignmentService, AssignmentService>();    
 
         // Register AutoMapper
         builder.Services.AddAutoMapper(typeof(MappingProfile)); // Register your mapping profiles

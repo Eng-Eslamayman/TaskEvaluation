@@ -1,6 +1,6 @@
 ﻿namespace TaskEvaluation.Infrastructure.Services
 {
-	internal class StudentService : IStudentService
+	public class StudentService : IStudentService
     {
 		private readonly IBaseMapper<Student, StudentDTO> _studentDTOMapper;
 		private readonly IBaseMapper<StudentDTO, Student> _studentMapper;
