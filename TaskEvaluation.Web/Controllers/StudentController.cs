@@ -1,129 +1,97 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
-using TaskEvaluation.Core.Entities.Business;
+using TaskEvaluation.Core.Entities.DTOs;
 using TaskEvaluation.Core.Interfaces.IRepositories;
-using TaskEvaluation.Infrastructure.Data;
+using TaskEvaluation.Core.Interfaces.IServices;
 
 namespace TaskEvaluation.Web.Controllers
 {
     public class StudentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IStudentService _studentService;
 
-        public StudentController(IUnitOfWork unitOfWork)
+        public StudentController(IUnitOfWork unitOfWork, IStudentService studentService)
         {
             _unitOfWork = unitOfWork;
+            _studentService = studentService;
         }
 
-        // GET: Student
-        //public async Task<IActionResult> Index()
-        //{
-        //    return View(await _context.Students.ToListAsync());
-        //}
+        public async Task<IActionResult> Index()
+        {
+            var students = await _studentService.GetStudentsAsync();
+            return View(students);
+        }
 
-        //// GET: Student/Create
-        //public IActionResult Create()
-        //{
-        //    return View();
-        //}
+        public IActionResult Create()
+        {
+            return View();
+        }
 
-        //// POST: Student/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,FullName,MobileNumber,Email,ProfilePic,GroupId")] Student student)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _context.Add(student);
-        //        await _context.SaveChangesAsync();
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(student);
-        //}
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(StudentDTO student)
+        {
+            if (ModelState.IsValid)
+            {
+                await _studentService.CreateAsync(student);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(student);
+        }
 
-        //// GET: Student/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int id)
+        {
+            var student = await _studentService.GetStudentAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
+        }
 
-        //    var student = await _context.Students.FindAsync(id);
-        //    if (student == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(student);
-        //}
+        public async Task<IActionResult> Edit(int id)
+        {
+            var student = await _studentService.GetStudentAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
+        }
 
-        //// POST: Student/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,MobileNumber,Email,ProfilePic,GroupId")] Student student)
-        //{
-        //    if (id != student.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, StudentDTO studentDTO)
+        {
+            if (id != studentDTO.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(student);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!StudentExists(student.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(student);
-        //}
+            if (ModelState.IsValid)
+            {
+                await _studentService.UpdateAsync(studentDTO);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(studentDTO);
+        }
 
-        //// GET: Student/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var student = await _studentService.GetStudentAsync(id);
+            if (student == null)
+            {
+                return NotFound();
+            }
+            return View(student);
+        }
 
-        //    var student = await _context.Students
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (student == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(student);
-        //}
-
-        //// POST: Student/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var student = await _context.Students.FindAsync(id);
-        //    _context.Students.Remove(student);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool StudentExists(int id)
-        //{
-        //    return _context.Students.Any(e => e.Id == id);
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            await _studentService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
