@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskEvaluation.Core.Entities.DTOs;
 using TaskEvaluation.Core.Interfaces.IServices;
 using TaskEvaluation.Infrastructure.Services;
 
 namespace TaskEvaluation.Web.Controllers
 {
+    [Authorize]
     public class SolutionController : Controller
     {
         private readonly ISolutionService _solutionService;

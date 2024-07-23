@@ -8,9 +8,9 @@ namespace TaskEvaluation.Web.Services
     public class EmailSender : IEmailSender
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly STMPSetting _smtpSetting;
+        private readonly MailSettings _smtpSetting;
 
-        public EmailSender(IOptions<STMPSetting> smtpSetting, IWebHostEnvironment webHostEnvironment)
+        public EmailSender(IOptions<MailSettings> smtpSetting, IWebHostEnvironment webHostEnvironment)
         {
             _smtpSetting = smtpSetting.Value;
             _webHostEnvironment = webHostEnvironment;

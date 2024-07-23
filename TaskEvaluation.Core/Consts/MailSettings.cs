@@ -1,6 +1,6 @@
 ﻿namespace TaskEvaluation.Core.Consts
 {
-    public class STMPSetting
+    public class MailSettings
     {
         public string? Email { get; set; }
         public string? Display { get; set; }

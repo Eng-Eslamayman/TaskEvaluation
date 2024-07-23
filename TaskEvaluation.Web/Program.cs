@@ -31,8 +31,8 @@ public class Program
         builder.Services.AddScoped<IEmailSender, EmailSender>();
         builder.Services.AddScoped<IEmailBodyBuilder, EmailBodyBuilder>();
 
-        builder.Services.Configure<STMPSetting>(builder.Configuration.GetSection(nameof(STMPSetting)));
-
+        builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+       
         // Register the services
         builder.Services.AddScoped<ICourseService, CourseService>();
         builder.Services.AddScoped<ISolutionService, SolutionService>(); 

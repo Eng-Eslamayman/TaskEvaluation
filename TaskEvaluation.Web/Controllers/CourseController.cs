@@ -8,8 +8,7 @@ using TaskEvaluation.Core.Mapper;
 
 namespace TaskEvaluation.Web.Controllers
 {
-
-
+    [Authorize]
     public class CourseController : Controller
     {
 

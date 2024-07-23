@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace TaskEvaluation.Web.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
