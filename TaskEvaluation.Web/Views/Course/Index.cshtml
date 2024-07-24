@@ -1,49 +1,66 @@
 ﻿@model IEnumerable<CourseDTO>
 
 @{
-    ViewData["Title"] = "Courses";
+	ViewData["Title"] = "Courses";
 }
 
 <h1>Courses</h1>
+<hr />
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+	<p>
+		<a asp-action="Create" class="btn btn-outline-primary">Create New</a>
+	</p>
+}
+<div class="row">
+	@if (Model != null)
+	{
+		foreach (var item in Model)
+		{
+			<div class="col-md-4 col-xs-6 border-primary mb-3">
+				<div class="card border-success mb-3" style="max-width: 20rem;">
+					<div class="card-header bg-success text-white">
+						<h4 class="card-title">
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-primary">Create New</a>
-</p>
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.IsCompleted)
-            </th>
-            <th scope="col">
-                @Html.DisplayNameFor(model => model.EntryDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="table-dark">
-                <td>
-                    @Html.DisplayFor(modelItem => item.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EntryDate)
-                </td>
-                <td>
-                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a  class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                    <a  class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+							@item.Title
+							@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+							{
+								<a class="text-white float-right" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+							}
+						</h4>
+					</div>
 
+					<div class="card-body">
+
+						<p class="card-text"><b>IsCompleted: </b>@(item.IsCompleted != null ? item.IsCompleted : "NO")</p>
+						<p class="card-text ">
+							<b>Status: </b>
+							@if (DateTime.Now >= item.EntryDate)
+							{
+								<span class="badge bg-success text-white">AVAILABLE</span>
+							}
+							else if (DateTime.Now < item.EntryDate)
+							{
+								<span class="badge bg-danger text-white">EXPIRED</span>
+							}
+							else
+							{
+								<span class="badge bg-primary text-white">UPCOMING</span>
+							}
+						</p>
+
+						<div class="card-footer text-muted">
+							<a class="btn btn-outline-primary" asp-action="Details" asp-route-id="@item.Id">
+								<i class="bi bi-eye-fill"></i> Show Details
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+	}
+	else
+	{
+		<p>No Courses available.</p>
+	}
+</div>

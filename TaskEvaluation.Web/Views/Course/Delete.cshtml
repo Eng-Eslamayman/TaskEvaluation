@@ -26,6 +26,7 @@
     <form asp-controller="Course" asp-action="Delete" asp-route-id="@Model.Id">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" />
+        <a class="btn btn-outline-primary float-right" asp-action="Index">Back to List</a>
+
     </form>
-    <a asp-action="Index">Back to List</a>
 </div>

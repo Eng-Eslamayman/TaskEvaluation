@@ -5,11 +5,10 @@
 }
 
 <h1>Course Details</h1>
-<h4>Course</h4>
 <hr />
 
 
-<table class="table table-hover">
+@* <table class="table table-hover">
 	<thead>
 		<tr>
 			<th scope="col">
@@ -31,7 +30,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr class ="table-info">
+		<tr class="table-info">
 			<td>
 				@Html.DisplayFor(model => model.Title)
 			</td>
@@ -51,8 +50,65 @@
 	</tbody>
 
 </table>
-<div>
-	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-</div>
-<a asp-action="Index">Back to List</a>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+	<div>
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+		<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-primary">Delete</a>
+	</div>
+}
+<a asp-action="Index">Back to List</a> *@
 
+<div class="container mt-4">
+	<div class="row">
+		<div class="col-md-8 offset-md-2">
+			<div class="card mb-4">
+				<div class="card-header text-white bg-primary">
+					<h5 class="card-title">@Model.Title</h5>
+				</div>
+				<div class="row g-0">
+
+					<div class="col-md-8">
+						<div class="card-body">
+
+							<p class="card-text"><b>IsCompleted: </b>@Model.IsCompleted</p>
+							<p class="card-text"><b>IsDeleted: </b>@Model.IsDeleted</p>
+							<p class="card-text"><b>EntryDate: </b>@Model.EntryDate</p>
+							<p class="card-text"><b>UpdateDate: </b>@Model.UpdateDate</p>
+							<p class="card-text">
+								<b>Status: </b>
+								@if (DateTime.Now >= Model.EntryDate)
+								{
+									<span class="badge bg-success text-white">AVAILABLE</span>
+								}
+								else if (DateTime.Now < Model.EntryDate)
+								{
+									<span class="badge bg-danger text-white">EXPIRED</span>
+								}
+								else
+								{
+									<span class="badge bg-primary text-white">UPCOMING</span>
+								}
+							</p>
+
+						</div>
+					</div>
+				</div>
+				<div class="card-footer">
+					
+					@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+					{
+						<div>
+							<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+							<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+						</div>
+					}
+					<br />
+
+					<a class="btn btn-outline-primary float-right" asp-action="Index">Back to List</a>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

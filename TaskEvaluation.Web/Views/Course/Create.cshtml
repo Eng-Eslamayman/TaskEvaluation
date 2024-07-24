@@ -6,7 +6,6 @@
 
 <h1>Add New Course</h1>
 
-<h4>Course</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -21,14 +20,15 @@
                 <input asp-for="EntryDate" class="form-control" />
                 <span asp-validation-for="EntryDate" class="text-danger"></span>
             </div>
+           
             <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+                <a class="btn btn-outline-primary float-right" asp-action="Index">Back to List</a>
+
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+

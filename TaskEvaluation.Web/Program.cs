@@ -78,7 +78,7 @@ public class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Account}/{action=Login}/{id?}");
-
+        ApplicationDbContext.SeedUsersAndRolesAsync(app).Wait();
         app.Run();
     }
 }
