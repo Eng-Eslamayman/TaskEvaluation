@@ -37,10 +37,14 @@ public class Program
         builder.Services.AddScoped<ICourseService, CourseService>();
         builder.Services.AddScoped<ISolutionService, SolutionService>(); 
         builder.Services.AddScoped<IStudentService, StudentService>();  
-        builder.Services.AddScoped<IAssignmentService, AssignmentService>();    
+        builder.Services.AddScoped<IAssignmentService, AssignmentService>();
+		//builder.Services.AddTransient<IEvaluatedAssignmentService, EvaluatedAssignmentService>();
+		builder.Services.AddTransient<IGroupService, GroupService>();
+		builder.Services.AddTransient<IGradeService, GradeService>();
 
-        // Register AutoMapper
-        builder.Services.AddAutoMapper(typeof(MappingProfile)); // Register your mapping profiles
+
+		// Register AutoMapper
+		builder.Services.AddAutoMapper(typeof(MappingProfile)); // Register your mapping profiles
 
         // Register the custom BaseMapper as a transient service
         builder.Services.AddTransient(typeof(IBaseMapper<,>), typeof(BaseMapper<,>));
