@@ -14,7 +14,11 @@ namespace TaskEvaluation.Core.Interfaces.IServices
 		Task<SolutionDTO> CreateAsync(SolutionDTO model);
 		Task UpdateAsync(SolutionDTO model);
 		Task DeleteAsync(int id);
-
+		Task<SolutionDTO> UpdateAsync (UploadSolutionDTO model);
+		Task<SolutionDTO> GetSolutionAsync(int assignmentId, int studentId);
+		Task<SolutionDTO> UploadSolutionAsync(UploadSolutionDTO model);
+		Task<IEnumerable<SolutionStudentDTO>> GetStudenSolutions();
+		Task<SolutionStudentDTO> GetSolutionWithStudent(int id);
 
 	}
 }

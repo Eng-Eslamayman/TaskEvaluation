@@ -4,5 +4,6 @@ global using System.Linq.Expressions;
 global using TaskEvaluation.Core.Consts;
 global using AutoMapper;
 global using TasksEvaluation.Core.DTOs;
+global using TaskEvaluation.Core.Entities.Business;
 
 
