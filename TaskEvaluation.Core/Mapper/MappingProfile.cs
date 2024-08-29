@@ -14,10 +14,13 @@ namespace TaskEvaluation.Core.Mapper
         public MappingProfile()
         {
             CreateMap<Course, CourseDTO>().ReverseMap();
-            CreateMap<Solution, SolutionDTO>().ReverseMap();  
-            CreateMap<Student, StudentDTO>().ReverseMap();
-            CreateMap<Assignment, AssignmentDTO>().ReverseMap();          
-        }
-    }
+            CreateMap<Solution, SolutionDTO>().ReverseMap();
+			CreateMap<SolutionDTO, UploadSolutionDTO>().ReverseMap();
+			CreateMap<Student, StudentDTO>().ReverseMap();
+            CreateMap<Assignment, AssignmentDTO>().ReverseMap();
+			CreateMap<Group, GroupDTO>().ReverseMap();
+
+		}
+	}
 
 }
