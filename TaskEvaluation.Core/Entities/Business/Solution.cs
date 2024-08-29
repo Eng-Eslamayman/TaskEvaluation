@@ -11,7 +11,9 @@ namespace TaskEvaluation.Core.Entities.Business
     public class Solution : BaseModel
     {
         [RegularExpression(RegexPatterns.AllowedExtensions,ErrorMessage = Errors.NotAllowed)]
-        public string SolutionFile { get; set; } = null!;
+		[Required(ErrorMessage = Errors.RequiredField)]
+
+		public string SolutionFile { get; set; } = null!;
         public string? Notes { get; set; }
         public int? EvaluationGradeId { get; set; }
         public EvaluationGrade? EvaluationGrade { get; set; }

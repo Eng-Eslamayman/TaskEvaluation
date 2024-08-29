@@ -9,11 +9,18 @@ namespace TaskEvaluation.Core.Entities.Business
 {
     public class Student: BaseModel
     {
-        public string FullName { get; set; } = null!;
-        [RegularExpression(RegexPatterns.MobileNumber ,ErrorMessage = Errors.MobileNumber)]
+		[Required(ErrorMessage = Errors.RequiredField)]
+		[MaxLength(100, ErrorMessage = Errors.MaxLength)]
+		public string FullName { get; set; } = null!;
+		[Display(Name = "Mobile Number")]
+		[RegularExpression(RegexPatterns.MobileNumber ,ErrorMessage = Errors.MobileNumber)]
         public string MobileNumber { get; set; } = null!;
-        public string Email { get; set; } = null!;
-        public string? ProfilePic { get; set; }
+		[Display(Name = "Email Address")]
+		[MaxLength(100, ErrorMessage = Errors.Email)]
+		public string Email { get; set; } = null!;
+		[Display(Name = "Profile Picture")]
+
+		public string? ProfilePic { get; set; }
         public int? GroupId { get; set; }
         public Group? Group { get; set; }
         public ICollection<Solution>? Solutions { get; set; }
