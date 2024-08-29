@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TaskEvaluation.Core.Entities.DTOs
 {
-    public class EvaluationGardeDTO: BaseModel
-    {
+    public class EvaluationGardeDTO: BaseModelDTO
+	{
         public string Grade { get; set; } = null!;
     }
 }

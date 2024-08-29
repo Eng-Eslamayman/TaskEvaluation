@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace TaskEvaluation.Core.Entities.DTOs
 {
-    public class StudentDTO: BaseModel
-    {
+    public class StudentDTO: BaseModelDTO
+	{
         public string FullName { get; set; } = null!;
         public string MobileNumber { get; set; } = null!;
         public string Email { get; set; } = null!;
         public string? ProfilePic { get; set; }
-    }
+		public int? GroupId { get; set; }
+
+	}
 }

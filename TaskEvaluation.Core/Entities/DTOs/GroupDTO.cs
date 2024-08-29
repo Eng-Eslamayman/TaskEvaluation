@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace TaskEvaluation.Core.Entities.DTOs
 {
-    public class GroupDTO : BaseModel
-    {
+    public class GroupDTO : BaseModelDTO
+	{
         public string Title { get; set; } = null!;
     }
 }
