@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TasksEvaluation.Core.Interfaces.IServices
+namespace TaskEvaluation.Core.Interfaces.IServices
 {
     public interface IGradeService
     {

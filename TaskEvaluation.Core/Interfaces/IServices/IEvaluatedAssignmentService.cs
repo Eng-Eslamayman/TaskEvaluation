@@ -4,9 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using TasksEvaluation.Core.DTOs;
-
-namespace TasksEvaluation.Core.Interfaces.IServices
+namespace TaskEvaluation.Core.Interfaces.IServices
 {
     public interface IEvaluatedAssignmentService
     {
